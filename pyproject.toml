@@ -1,0 +1,16 @@
+[project]
+name = "felt-desktop-agent"
+version = "0.1.0"
+description = "Felt's desktop-side sensor: D-Bus notification passthrough, read aloud via felt-voice"
+requires-python = ">=3.12"
+dependencies = [
+    "httpx>=0.28.1",
+    "pydantic-settings>=2.15.0",
+]
+
+[project.scripts]
+felt-desktop-agent = "felt_desktop_agent:main"
+
+[build-system]
+requires = ["uv_build>=0.12.10,<0.13.0"]
+build-backend = "uv_build"
