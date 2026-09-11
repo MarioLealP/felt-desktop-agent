@@ -40,12 +40,14 @@ source = { editable = "." }
 dependencies = [
     { name = "httpx" },
     { name = "pydantic-settings" },
+    { name = "wayfire" },
 ]
 
 [package.metadata]
 requires-dist = [
     { name = "httpx", specifier = ">=0.28.1" },
     { name = "pydantic-settings", specifier = ">=2.15.0" },
+    { name = "wayfire", specifier = ">=4.0" },
 ]
 
 [[package]]
@@ -226,4 +228,13 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/a3/26/b09b8010994eccc3c09092e6b34058f36a460eea2d4c3e8b910c695975a0/typing_inspection-0.4.4.tar.gz", hash = "sha256:547274fa6b0a561ccf549cc9524b999a578e737d015d8709d021f9d0d13bea47", size = 76928, upload-time = "2026-08-12T12:37:25.997Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/67/81/4add07e5172b7ac40d8ed5ff580409a7801a4fe26d529bdd915401dabfbe/typing_inspection-0.4.4-py3-none-any.whl", hash = "sha256:65b8397ba37ccbce054456aaccddfc91e6e3083c92824df348d96ca832f3f147", size = 14750, upload-time = "2026-08-12T12:37:24.648Z" },
+]
+
+[[package]]
+name = "wayfire"
+version = "4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/14/ee32a4cf36b3f1a9bc567a9e232fc4fa1457ce6ecb2990046fc7bc4b12ce/wayfire-4.0.tar.gz", hash = "sha256:6cdeba83f02be73864772436381f344beb0c254c9fbb9464dd9ec64dc10f8741", size = 24787, upload-time = "2026-07-27T08:21:09.451Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/79/8e/2912a9fa75774213618aec779a3f9d221e856d0d63194cc29f251e4b3295/wayfire-4.0-py3-none-any.whl", hash = "sha256:4994a5dc5dc3be3a2fcfbaa8e51dd706f0742f56d6ee812336c8e456d70e238e", size = 25218, upload-time = "2026-07-27T08:21:08.301Z" },
 ]
