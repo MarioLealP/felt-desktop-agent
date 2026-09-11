@@ -6,6 +6,8 @@ class AgentConfig(BaseSettings):
 
     voice_url: str = "http://192.168.1.104:8421"
 
+    api_port: int = 8422
+
     # Per-app allowlist — deliberately empty by default. Nothing gets read
     # aloud until explicitly added; never a default-everything behavior.
     allowed_apps: str = ""
