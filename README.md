@@ -34,10 +34,16 @@ uv run felt-desktop-agent
 
 Built and verified: fires a real D-Bus notification, reads it aloud
 through felt-voice + local audio playback, confirmed with a live test
-(`notify-send`, allowlisted for the test). **Not yet done**:
-- Fullscreen/game-focus gating — the actual ask was "while I'm playing,"
-  not "always." Currently reads aloud any allowlisted notification,
-  any time. Needs Wayfire's `wlr-foreign-toplevel` state.
-- Real app allowlist entries — only `notify-send` (the test tool) is
-  confirmed. WhatsApp/Discord's actual D-Bus `app_name` values need
-  confirming against a real notification from each before adding them.
+(`notify-send`, allowlisted for the test). **Fullscreen/game-focus
+gating is built too** — the actual ask was "while I'm playing," not
+"always." Uses Wayfire's own `ipc` plugin (via the `wayfire` PyPI
+client) to check for a fullscreen+activated view; confirmed live against
+a real running game, not just in theory. Fails closed (won't speak) if
+the IPC socket is ever unreachable.
+
+**Not yet done**: real D-Bus notification `app_name` values for
+WhatsApp/Discord. Their Wayland `app-id`s are confirmed live
+(`com.ktechpit.whatsie` / WhatSie, `vesktop`), but that's a different
+identifier space from the D-Bus notification `app_name` this watcher
+actually filters on — still needs an observed real `Notify()` call from
+each before they can be safely added to the allowlist.
