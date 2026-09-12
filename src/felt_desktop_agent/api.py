@@ -4,12 +4,28 @@ runs, not on the server)."""
 
 import uvicorn
 from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
 
 from felt_desktop_agent.config import load_config
 from felt_desktop_agent.kdeconnect import get_battery, ring_phone
 from felt_desktop_agent.media import get_status, next_track, play_pause, previous_track, set_volume
+from felt_desktop_agent.phone_alarm import set_phone_alarm
 
 app = FastAPI(title="felt-desktop-agent", version="0.1.0")
+
+
+class PhoneAlarmRequest(BaseModel):
+    hour: int
+    minute: int
+    label: str = ""
+
+
+@app.post("/v1/phone/alarm")
+async def phone_alarm_endpoint(req: PhoneAlarmRequest) -> dict:
+    ok = await set_phone_alarm(req.hour, req.minute, req.label)
+    if not ok:
+        raise HTTPException(status_code=503, detail="Couldn't set an alarm on the phone (adb unreachable?).")
+    return {"ok": True}
 
 
 @app.get("/v1/kdeconnect/battery")
