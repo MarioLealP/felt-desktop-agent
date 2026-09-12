@@ -30,6 +30,14 @@ class AgentConfig(BaseSettings):
     # via python-evdev each time the watcher (re)starts.
     wheel_toggle_device_name: str = ""
 
+    # Path to the custom-trained openWakeWord "Felt" model (.onnx). Empty
+    # = disabled, same convention as wheel_toggle_device_name above — no
+    # pretrained model exists for this phrase, so this stays unset until
+    # a real trained model file is deployed (see wake_word.py, trained
+    # via github.com/lgpearson1771/openwakeword-trainer).
+    wake_word_model_path: str = ""
+    wake_word_threshold: float = 0.5
+
     def allowed_apps_list(self) -> list[str]:
         return [a.strip().lower() for a in self.allowed_apps.split(",") if a.strip()]
 

@@ -9,6 +9,7 @@ from felt_desktop_agent.dbus_watcher import watch_notifications
 from felt_desktop_agent.filters import is_allowed
 from felt_desktop_agent.focus_gate import is_fullscreen_game_active
 from felt_desktop_agent.player import speak
+from felt_desktop_agent.wake_word import run_forever as run_wake_word_forever
 from felt_desktop_agent.wheel_toggle import run_forever as run_wheel_toggle_forever
 
 logging.basicConfig(level=logging.INFO)
@@ -46,6 +47,8 @@ async def _run() -> None:
     tasks = [_watch_notifications_loop(), _run_api()]
     if config.wheel_toggle_device_name:
         tasks.append(run_wheel_toggle_forever(config.wheel_toggle_device_name))
+    if config.wake_word_model_path:
+        tasks.append(run_wake_word_forever(config.wake_word_model_path, config.wake_word_threshold))
     await asyncio.gather(*tasks)
 
 
