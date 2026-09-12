@@ -4,7 +4,10 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class AgentConfig(BaseSettings):
     model_config = SettingsConfigDict(env_prefix="FELT_AGENT_", env_file=".env", extra="ignore")
 
-    voice_url: str = "http://192.168.1.104:8421"
+    # felt-voice — unset means TTS-read-aloud is simply skipped, not a
+    # guessed/hardcoded address (2026-09-12 finding: this used to default
+    # to a real machine's actual IP, a real "no hardcoding" violation).
+    voice_url: str | None = None
 
     api_port: int = 8422
 
