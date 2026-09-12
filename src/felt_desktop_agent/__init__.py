@@ -13,13 +13,26 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+def _is_allowed(app_name: str, summary: str, config) -> bool:
+    if app_name.lower() in config.allowed_apps_list():
+        return True
+    # KDE-Connect-forwarded phone notifications all share app_name="KDE
+    # Connect" — the real source app is in `summary` instead.
+    if app_name == "KDE Connect" and summary.lower() in config.kdeconnect_source_apps_list():
+        return True
+    return False
+
+
 async def _watch_notifications_loop() -> None:
     config = load_config()
-    allowed = config.allowed_apps_list()
-    logger.info("watching notifications, allowlist=%s", allowed or "(empty — nothing will be read aloud)")
+    logger.info(
+        "watching notifications, native allowlist=%s, KDE Connect source allowlist=%s",
+        config.allowed_apps_list() or "(empty)",
+        config.kdeconnect_source_apps_list() or "(empty)",
+    )
 
     async for app_name, summary, body in watch_notifications():
-        if app_name.lower() not in allowed:
+        if not _is_allowed(app_name, summary, config):
             logger.info("ignored (not allowlisted): app=%s summary=%r", app_name, summary)
             continue
         if not is_fullscreen_game_active():
