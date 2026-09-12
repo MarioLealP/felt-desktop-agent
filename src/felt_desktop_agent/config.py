@@ -23,6 +23,13 @@ class AgentConfig(BaseSettings):
     # matched against `summary`, checked only when app_name == "KDE Connect".
     kdeconnect_source_apps: str = ""
 
+    # Substring match (case-insensitive) against an input device's name,
+    # used to find the mouse whose wheel-tilt should toggle the Felt
+    # tray app's window. Empty = disabled. Not the exact device path
+    # (those aren't stable across reconnects/reboots) — matched by name
+    # via python-evdev each time the watcher (re)starts.
+    wheel_toggle_device_name: str = ""
+
     def allowed_apps_list(self) -> list[str]:
         return [a.strip().lower() for a in self.allowed_apps.split(",") if a.strip()]
 
