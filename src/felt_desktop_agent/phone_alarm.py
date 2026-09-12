@@ -16,6 +16,7 @@ skill.py in felt-core for how the caller handles that.
 """
 
 import asyncio
+import shlex
 
 
 async def _adb(*args: str) -> tuple[int, str]:
@@ -28,7 +29,6 @@ async def _adb(*args: str) -> tuple[int, str]:
 
 async def set_phone_alarm(hour: int, minute: int, label: str) -> bool:
     args = [
-        "shell",
         "am",
         "start",
         "-a",
@@ -48,7 +48,16 @@ async def set_phone_alarm(hour: int, minute: int, label: str) -> bool:
     ]
     if label:
         args += ["--es", "android.intent.extra.alarm.MESSAGE", label]
-    returncode, output = await _adb(*args)
+    # `adb shell` joins all its arguments into one string and hands that to
+    # a shell running ON THE PHONE — a real bug found live, 2026-09-12: a
+    # label containing a space ("felt test") arrived at this end as one
+    # clean argv token, but adb shell re-split it on the phone's shell,
+    # and `am` mis-parsed the stray second word as a package name
+    # ("pkg=test"), failing with "unable to resolve Intent". Quoting each
+    # token ourselves for that remote shell, not just passing a clean
+    # local argv list, is what actually avoids this.
+    command = " ".join(shlex.quote(arg) for arg in args)
+    returncode, output = await _adb("shell", command)
     # `am start` exits 0 even for some failures (e.g. no matching activity)
     # and reports the real error in its own stdout instead.
     return returncode == 0 and "Error" not in output
